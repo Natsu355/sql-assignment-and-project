@@ -1,0 +1,196 @@
+Exercise 1 (5 marks):
+
+Create a database schema for the online consultation and therapy website. The database should contain the following tables:-
+
+Doctor table:- The table should contain the attributes such as id, name, specialization, etc.
+
+Appointments table:- The table should contain information related to appointments set up by doctors and patients.
+
+Patient table:- The table should contain information on patients.
+
+Reviews table:- This table should contain reviews posted by patients.
+
+
+NOTE:- Use proper constraints on the attributes such as primary key, not null and etc.
+
+
+create database hospital_db;
+
+-- creating table doctor
+create table doctor(
+doc_id int primary key,
+doc_name varchar(30) not null,
+specilization varchar(30) not null);
+
+-- creating table patient
+
+create table patient (
+p_id int primary key,
+p_name varchar(30) not null,
+p_age int not null,
+health_issue text not null);
+
+-- creating table appointment
+
+create table appointments(
+app_id int primary key,
+p_id int not null,
+doc_id int not null,
+doc_name varchar(30) not null,
+p_name varchar(30) not null,
+app_date date not null,
+app_time time not null);
+
+-- creating table review
+
+create table reviews(
+review_id int primary key,
+p_id int not null,
+p_name varchar(30) not null,
+doc_name varchar(30) not null,
+doc_id int not null,
+review text);
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Exercise 2 (5 marks):
+
+Contact Table
+
+Id    Email     fname     lname     company     Active_flag     opt_out
+
+123   a@a.com   Kian      Seth      ABC           1               1
+133   b@a.com   Neha      Seth      ABC           1               0
+234   c@c.com   Puru      Malik     CDF           0               0
+342   d@d.com   Sid       Maan      TEG           1               0
+
+
+QUESTIONS:
+
+Select all columns from the contact table where the active flag is 1
+
+Deactivate contacts who are opted out 
+
+Delete all the contacts who have the company name as ‘ABC’
+
+Insert a new row with id as 658, name as ‘mili’, email as ‘mili@gmail.com’, the company as ‘DGH’, active flag as 1, opt-out flag as 1
+
+Pull out the unique values of the company column 
+
+Update name “mili” to “niti”.
+
+
+
+
+create database sqlassignment;
+
+
+-- creating table contact
+create table contact(
+id int primary key not null,
+email varchar(40) not null,
+fname varchar(30) not null,
+lname varchar(30) not null,
+company varchar(30) not null,
+active_flag int not null,
+opt_out int not null);
+
+-- Inserting values
+insert into contact values(123,"a@a.com","kian","seth","ABC",1,1),
+(133,"b@a.com","Neha","seth","ABC",1,0),(234,"c@c.com","Puru","Malik","CDF",0,0),
+(342,"d@d.com","sid","maan","TEG",1,0);
+
+select * from contact where active_flag=1;
+
+update contact set active_flag=0 where opt_out=0;
+
+delete from contact where company="ABC";
+
+
+insert into contact values(658,"milli@gmail.com","milli","sen","DGH",1,1);
+
+select distinct(company) from contact;
+
+update contact set fname='niti' where fname="milli";
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Exercise 3 (10 marks):
+
+Write a SQL query to find those customers with a grade less than 100. It should return cust_name, customer city, grade, salesman, and salesman city. The result should be ordered by ascending customer_id.
+
+
+Sample table: customer
+
+customer_id |   cust_name    |    city    | grade | salesman_id 
+
+-------------+----------------+------------+-------+-------------
+
+        3002 | Nick Rimando   | New York   |   100 |        5001
+
+        3007 | Brad Davis     | New York   |   200 |        5001
+
+        3005 | Graham Zusi    | California |   200 |        5002
+
+        3008 | Julian Green   | London     |   300 |        5002
+
+        3004 | Fabian Johnson | Paris      |   300 |        5006
+
+        3009 | Geoff Cameron  | Berlin     |   100 |        5003
+
+        3003 | Jozy Altidor   | Moscow     |   200 |        5007
+
+        3001 | Brad Guzan     | London     |       |        5005
+
+
+
+
+
+Sample table: salesman
+
+ salesman_id |    name    |   city   | commission 
+
+-------------+------------+----------+------------
+
+        5001 | James Hoog | New York |       0.15
+
+        5002 | Nail Knite | Paris    |       0.13
+
+        5005 | Pit Alex   | London   |       0.11
+
+        5006 | Mc Lyon    | Paris    |       0.14
+
+        5007 | Paul Adam  | Rome     |       0.13
+
+        5003 | Lauson Hen | San Jose |       0.12
+        
+             
+    create table customer(
+cust_id int primary key,
+cust_name varchar(30) ,
+city varchar(30) ,
+grade int ,
+salesman_id int );
+
+insert into customer values(3002,"Nick Rimando","new york",100,5001),
+(3007,"Brad Davis","new york",200,5001),(3005,"Graham Zusi","california",200,5002),
+(3008,"Julian Green","london",300,5002),(3004,"Fabian Johnson","paris",300,5006),
+(3009,"Geoff Cameron","berlin",100,5003),(3003,"Jozy Altidor","moscow",200,5007),
+(3001,"Brad Guzan","london",'',5005);
+
+select * from customer;
+
+create table salesman (
+salesman_id int primary key,
+name varchar(30) ,
+city varchar(30),
+commission float);
+
+insert into salesman values (5001,"James Hoog","new york",0.15),
+(5002,"Nail knite","paris",0.13),(5005,"Pit alex","london",0.11),
+(5006,"Mc lyon","paris",0.14),(5007,"Paul adam","rome",0.13),
+(5003,"Lauson Hen","san jose",0.12);
+
+select * from salesman;
+
+select cust_name, c.city,c.grade,s.name,s.city from customer c , salesman s where grade<100 and c.salesman_id=s.salesman_id order by cust_id;
